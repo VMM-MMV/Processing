@@ -24,6 +24,7 @@ ArrayList<PVector> sphereRotations = new ArrayList<PVector>();
 
 ArrayList<PVector> cubeCurrentRotations = new ArrayList<PVector>();
 ArrayList<PVector> sphereCurrentRotations = new ArrayList<PVector>();
+int bulletAmount = 100;
 
 public void setup() {
   /* size commented out by preprocessor */;
@@ -96,14 +97,23 @@ public void renderSpheres() {
     }
 }
 
+public void bulletText() {
+  textSize(24);
+  fill(0); // Black color for text
+  textAlign(RIGHT, TOP);
+  text("Bullets: " + bulletAmount, width - 10, 10);
+}
+
 public void draw() {
   background(200);
   lights();
-  
+
+  fill(255);
   spawnCubes();
   spawnSpheres();
   
   for (int i = bullets.size() - 1; i >= 0; i--) {
+    bulletText();
     PVector bullet = bullets.get(i);
     bullet.z -= 10;
     pushMatrix();
@@ -114,11 +124,13 @@ public void draw() {
     bullet_collisions(bullet, cubes, cubeRotations, cubeCurrentRotations);
     bullet_collisions(bullet, spheres, sphereRotations, sphereCurrentRotations);
   }
+  
 }
 
 public void mousePressed() {
-  if (mouseButton == LEFT) {
+  if (mouseButton == LEFT && bulletAmount > 0) {
     bullets.add(new PVector(mouseX, mouseY, 0));
+    bulletAmount -= 1;
   }
 }
 
