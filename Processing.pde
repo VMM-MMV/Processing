@@ -90,13 +90,13 @@ void bulletText() {
 void draw() {
   background(200);
   lights();
+  bulletText();
 
   fill(255);
   spawnCubes();
   spawnSpheres();
   
   for (int i = bullets.size() - 1; i >= 0; i--) {
-    bulletText();
     PVector bullet = bullets.get(i);
     bullet.z -= 10;
     pushMatrix();
@@ -106,8 +106,11 @@ void draw() {
     
     bullet_collisions(bullet, cubes, cubeRotations, cubeCurrentRotations);
     bullet_collisions(bullet, spheres, sphereRotations, sphereCurrentRotations);
+    if (bullet.z < -500) {
+      bullets.remove(bullet);
+    } 
   }
-  
+  bulletText();
 }
 
 void mousePressed() {
