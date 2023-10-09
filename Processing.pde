@@ -7,26 +7,43 @@ ArrayList<PVector> sphereRotations = new ArrayList<PVector>();
 
 ArrayList<PVector> cubeCurrentRotations = new ArrayList<PVector>();
 ArrayList<PVector> sphereCurrentRotations = new ArrayList<PVector>();
+
 int bulletAmount = 100;
 int enemiesAmount = 0;
-boolean gameOver = false;
+String gameState = "menu";
+int difficulty = 1;
+int minutes;
+int seconds;
+
+int startTime;
+int elapsedTime;
 
 void setup() {
   size(800, 600, P3D);
 }
 
+void displayMenu() {
+  textSize(48);
+  fill(255, 0, 0);
+  textAlign(CENTER, CENTER);
+  text("EASY", 100, height / 2);
+  text("MEDIUM", 300, height / 2);
+  text("HARD", 500, height / 2);
+  text("HELL", 700, height / 2);
+}
+
 
 void checkGameOver() {
   if (bulletAmount <= 0 || (cubes.size() + spheres.size()) >= 30) {
-    gameOver = true;
+    gameState = "end";
   }
 }
 
 void displayGameOver() {
   textSize(48);
-  fill(255, 0, 0); // Red color
+  fill(255, 0, 0);
   textAlign(CENTER, CENTER);
-  text("YOU LOSE", width / 2, height / 2);
+  text("YOU LOSE" + "\nYOUR TIME: " + minutes + ":" + seconds , width / 2, height / 2);
 }
 
 int probabilisticFunction() {
@@ -52,7 +69,7 @@ void bullet_collisions(PVector bullet, ArrayList<PVector> objects, ArrayList<PVe
 }
 
 void spawnCubes() {
-    if (random(100) < 3) {
+    if (random(100) < difficulty) {
         cubes.add(new PVector(random(100, width-100), random(100, height-100), random(-300, -100)));
         cubeRotations.add(new PVector(random(-0.1, 0.1), random(-0.1, 0.1), random(-0.1, 0.1)));
         cubeCurrentRotations.add(new PVector(0, 0, 0));
@@ -61,7 +78,7 @@ void spawnCubes() {
 }
 
 void spawnSpheres() {
-    if (random(100) < 3) {
+    if (random(100) < difficulty) {
         spheres.add(new PVector(random(100, width-100), random(100, height-100), random(-300, -100)));
         sphereRotations.add(new PVector(random(-0.1, 0.1), random(-0.1, 0.1), random(-0.1, 0.1)));
         sphereCurrentRotations.add(new PVector(0, 0, 0));
@@ -115,47 +132,79 @@ void bulletText() {
 void enemiesText() {
   textSize(24);
   fill(0);
-  textAlign(LEFT, TOP); // Changed alignment to LEFT, TOP
-  text("Enemies: " + int(cubes.size() + spheres.size()), 10, 10); // Adjusted the x-coordinate to 10
+  textAlign(LEFT, TOP);
+  text("Enemies: " + int(cubes.size() + spheres.size()), 10, 10);
 }
+
+void displayElapsedTime() {
+  elapsedTime = (millis() - startTime) / 1000;
+  minutes = elapsedTime / 60;
+  seconds = elapsedTime % 60;
+  
+  textSize(24);
+  fill(0);
+  textAlign(RIGHT, BOTTOM);
+  text("Time: " + nf(minutes, 2) + ":" + nf(seconds, 2), width - 10, height - 10);
+}
+
 
 void draw() {
   background(200);
   lights();
-  bulletText();
-  enemiesText();
-
-  if (!gameOver) { // Only update game logic if the game is not over
-    fill(255);
-    spawnCubes();
-    spawnSpheres();
-    
-    for (int i = bullets.size() - 1; i >= 0; i--) {
-      PVector bullet = bullets.get(i);
-      bullet.z -= 10;
-      pushMatrix();
-      translate(bullet.x, bullet.y, bullet.z);
-      sphere(5);
-      popMatrix();
-      
-      bullet_collisions(bullet, cubes, cubeRotations, cubeCurrentRotations);
-      bullet_collisions(bullet, spheres, sphereRotations, sphereCurrentRotations);
-      if (bullet.z < -500) {
-        bullets.remove(bullet);
-      } 
-    }
+  checkGameOver();
+  if (gameState.equals("menu")) {
+    displayMenu();
+  } else if (gameState.equals("play")) {
     bulletText();
     enemiesText();
-  } else {
-    displayGameOver(); // Display game over message
-  }
+    displayElapsedTime();
 
-  checkGameOver(); // Check game over condition
+      fill(255);
+      spawnCubes();
+      spawnSpheres();
+      
+      for (int i = bullets.size() - 1; i >= 0; i--) {
+        PVector bullet = bullets.get(i);
+        bullet.z -= 10;
+        pushMatrix();
+        translate(bullet.x, bullet.y, bullet.z);
+        sphere(5);
+        popMatrix();
+        
+        bullet_collisions(bullet, cubes, cubeRotations, cubeCurrentRotations);
+        bullet_collisions(bullet, spheres, sphereRotations, sphereCurrentRotations);
+        if (bullet.z < -500) {
+          bullets.remove(bullet);
+        } 
+      }
+  } else if (gameState.equals("end")) {
+    displayGameOver();
+  }
+}
+
+void menu() {
+  if (mouseX < width / 3) {
+      difficulty = 1;
+    } else if (mouseX < 2 * width / 3) {
+      difficulty = 2;
+      int bulletAmount = 50;
+    } else if (mouseY < height / 2) {
+      difficulty = 3;
+      int bulletAmount = 25;
+    } else {
+      difficulty = 4;
+      int bulletAmount = 10;
+    }
+    startTime = millis();
+    gameState = "play";
 }
 
 void mousePressed() {
-  if (mouseButton == LEFT && bulletAmount > 0) {
+  if (gameState.equals("menu")) {
+    menu();
+  } else if (gameState.equals("play") && mouseButton == LEFT && bulletAmount > 0) {
     bullets.add(new PVector(mouseX, mouseY, 0));
     bulletAmount -= 1;
   }
 }
+
