@@ -187,13 +187,13 @@ void menu() {
       difficulty = 1;
     } else if (mouseX < 2 * width / 3) {
       difficulty = 2;
-      int bulletAmount = 50;
+      bulletAmount = 50;
     } else if (mouseY < height / 2) {
       difficulty = 3;
-      int bulletAmount = 25;
+      bulletAmount = 25;
     } else {
       difficulty = 4;
-      int bulletAmount = 10;
+      bulletAmount = 10;
     }
     startTime = millis();
     gameState = "play";
