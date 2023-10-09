@@ -223,6 +223,16 @@ public void mousePressed() {
     bullets.add(new PVector(mouseX, mouseY, 0));
     bulletAmount -= 1;
   }
+  if (mouseX < width / 2) {
+    cubes.clear();
+    spheres.clear();
+    bullets.clear();
+    cubeRotations.clear();
+    sphereRotations.clear();
+    cubeCurrentRotations.clear();
+    sphereCurrentRotations.clear();
+    gameState = "menu";
+  }
 }
 
 
