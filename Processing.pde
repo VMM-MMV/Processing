@@ -32,10 +32,10 @@ void displayMenu() {
   text("HELL", 700, height / 2);
 }
 
-
 void checkGameOver() {
   if (bulletAmount <= 0 || (cubes.size() + spheres.size()) >= 30) {
     gameState = "end";
+    bulletAmount = 1;
   }
 }
 
@@ -43,7 +43,7 @@ void displayGameOver() {
   textSize(48);
   fill(255, 0, 0);
   textAlign(CENTER, CENTER);
-  text("YOU LOSE" + "\nYOUR TIME: " + minutes + ":" + seconds , width / 2, height / 2);
+  text("YOU LOSE" + "\nYOUR TIME: " + minutes + ":" + seconds + "\n" + "RESTART" , width / 2, height / 2);
 }
 
 int probabilisticFunction() {
@@ -183,20 +183,23 @@ void draw() {
 }
 
 void menu() {
-  if (mouseX < width / 3) {
-      difficulty = 1;
-    } else if (mouseX < 2 * width / 3) {
-      difficulty = 2;
-      bulletAmount = 50;
-    } else if (mouseY < height / 2) {
-      difficulty = 3;
-      bulletAmount = 25;
-    } else {
-      difficulty = 4;
-      bulletAmount = 10;
-    }
-    startTime = millis();
-    gameState = "play";
+  int halfOfScreen = width / 2;
+
+  if (mouseX < halfOfScreen / 2) {
+    difficulty = 1;
+    bulletAmount = 100;
+  } else if (mouseX <  halfOfScreen) {
+    difficulty = 2;
+    bulletAmount = 50;
+  } else if (mouseX < halfOfScreen + (halfOfScreen / 2)) {
+    difficulty = 3;
+    bulletAmount = 25;
+  } else {
+    difficulty = 4;
+    bulletAmount = 10;
+  }
+  startTime = millis();
+  gameState = "play";
 }
 
 void mousePressed() {
@@ -205,17 +208,16 @@ void mousePressed() {
   } else if (gameState.equals("play") && mouseButton == LEFT && bulletAmount > 0) {
     bullets.add(new PVector(mouseX, mouseY, 0));
     bulletAmount -= 1;
-  }
-  
-  if (mouseX < width / 2) {
-    cubes.clear();
-    spheres.clear();
-    bullets.clear();
-    cubeRotations.clear();
-    sphereRotations.clear();
-    cubeCurrentRotations.clear();
-    sphereCurrentRotations.clear();
-    gameState = "menu";
+  } else if (gameState.equals("end")){
+    if ((mouseX < (width / 2 + 100))) {
+      cubes.clear();
+      spheres.clear();
+      bullets.clear();
+      cubeRotations.clear();
+      sphereRotations.clear();
+      cubeCurrentRotations.clear();
+      sphereCurrentRotations.clear();
+      gameState = "menu";
+    }
   }
 }
-
