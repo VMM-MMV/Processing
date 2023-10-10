@@ -40,13 +40,15 @@ public void setup() {
 }
 
 public void displayMenu() {
+  // float quarterOfScreen = width / 4;
   textSize(48);
   fill(255, 0, 0);
   textAlign(CENTER, CENTER);
-  text("EASY", 100, height / 2);
-  text("MEDIUM", 300, height / 2);
-  text("HARD", 500, height / 2);
-  text("HELL", 700, height / 2);
+  
+  text("EASY", quarterOfScreen * 0.5f, height / 2);
+  text("MEDIUM", quarterOfScreen * 1.5f, height / 2);
+  text("HARD", quarterOfScreen * 2.5f, height / 2);
+  text("HELL", quarterOfScreen * 3.5f, height / 2);
 }
 
 public void checkGameOver() {
@@ -161,7 +163,7 @@ public void displayElapsedTime() {
   textSize(24);
   fill(0);
   textAlign(RIGHT, BOTTOM);
-  text("Time: " + nf(minutes, 2) + ":" + nf(seconds, 2), width - 10, height - 10);
+  text(difficulty + "Time: " + nf(minutes, 2) + ":" + nf(seconds, 2), width - 10, height - 10);
 }
 
 
@@ -200,15 +202,19 @@ public void draw() {
 }
 
 public void menu() {
-  int halfOfScreen = width / 2;
+  // float quarterOfScreen = width / 4;
+  text("EASY", quarterOfScreen * 0.5f, height / 2);
+  text("MEDIUM", quarterOfScreen * 1.5f, height / 2);
+  text("HARD", quarterOfScreen * 2.5f, height / 2);
+  text("HELL", quarterOfScreen * 3.5f, height / 2);
 
-  if (mouseX < halfOfScreen / 2) {
+  if (mouseX < quarterOfScreen * 0.5f) {
     difficulty = 1;
     bulletAmount = 100;
-  } else if (mouseX <  halfOfScreen) {
+  } else if (mouseX <  quarterOfScreen * 1.5f) {
     difficulty = 2;
     bulletAmount = 50;
-  } else if (mouseX < halfOfScreen + (halfOfScreen / 2)) {
+  } else if (mouseX < quarterOfScreen * 2.5f) {
     difficulty = 3;
     bulletAmount = 25;
   } else {
