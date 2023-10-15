@@ -15,76 +15,51 @@ import java.io.IOException;
 
 public class Processing extends PApplet {
 
-Mover mover;
-
-public void setup() {
-  /* size commented out by preprocessor */;
-  mover = new Mover();
-}
-
-public void draw() {
-  background(255);
-  mover.update();
-  mover.checkEdges();
-  mover.display();
-}
-
 class Mover {
   PVector location;
   PVector velocity;
   PVector acceleration;
-  float topspeed;
-
-  // Initialize Perlin noise offsets
-  float xoff = 0;
-  float yoff = 1000; // Arbitrary value to make it different from xoff
+  float topspeed = 4;
 
   Mover() {
-    location = new PVector(width/2, height/2);
+    location = new PVector(random(width), random(height));
     velocity = new PVector(0, 0);
-    acceleration = new PVector(0, 0);
-    topspeed = 5;
   }
 
   public void update() {
-    // Use Perlin noise to get a smooth random value between 0 and 1
-    float ax = noise(xoff);
-    float ay = noise(yoff);
-
-    // Map the values to desired acceleration range, for example -0.1 to 0.1
-    ax = map(ax, 0, 1, -0.1f, 0.1f);
-    ay = map(ay, 0, 1, -0.1f, 0.1f);
-
-    acceleration.set(ax, ay);
-
+    PVector mouse = new PVector(mouseX, mouseY);
+    PVector dir = PVector.sub(mouse, location);
+    float distance = dir.mag();
+    
+    // Normalize and scale by a factor inversely proportional to distance
+    dir.normalize();
+    float strength = map(distance, 0, width, 5, 0); // Assuming max distance is width of canvas
+    dir.mult(strength);
+    
+    acceleration = dir;
     velocity.add(acceleration);
     velocity.limit(topspeed);
     location.add(velocity);
-
-    // Increment the offsets to move through the Perlin noise space
-    xoff += 0.01f;
-    yoff += 0.01f;
   }
 
   public void display() {
+    fill(127);
     stroke(0);
-    fill(175);
-    ellipse(location.x, location.y, 16, 16);
+    ellipse(location.x, location.y, 32, 32);
   }
+}
 
-  public void checkEdges() {
-    if (location.x > width) {
-      location.x = 0;
-    } else if (location.x < 0) {
-      location.x = width;
-    }
+Mover m;
 
-    if (location.y > height) {
-      location.y = 0;
-    } else if (location.y < 0) {
-      location.y = height;
-    }
-  }
+public void setup() {
+  /* size commented out by preprocessor */;
+  m = new Mover();
+}
+
+public void draw() {
+  background(255);
+  m.update();
+  m.display();
 }
 
 
