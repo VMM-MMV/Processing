@@ -15,33 +15,39 @@ import java.io.IOException;
 
 public class Processing extends PApplet {
 
-PVector location;
+PVector location = new PVector(640/2, 640/2, 100);
+PVector velocity = new PVector(2.5f, 5, 20);
 
 public void setup() {
   /* size commented out by preprocessor */;
-  location = new PVector(width/2, height/2);
-  background(255);
 }
 
 public void draw() {
-  int choice = PApplet.parseInt(random(4));
+  background(255);
+  lights();
 
-  if (choice == 0) {
-    location.x++;
-  } else if (choice == 1) {
-    location.x--;
-  } else if (choice == 2) {
-    location.y++;
-  } else {
-    location.y--;
+  location.add(velocity);
+
+  if ((location.x > width-200) || (location.x < 100)) {
+    velocity.x = velocity.x * -1;
+  }
+  if ((location.y > height-200) || (location.y < 100)) {
+    velocity.y = velocity.y * -1;
+  }
+  if ((location.z > -200) || (location.z < 0)) {
+    velocity.z = velocity.z * -1;
   }
 
   stroke(0);
-  point(location.x, location.y);
+  fill(175);
+  pushMatrix(); // Start a new drawing state
+  translate(location.x, location.y, location.z); // Move to the location of the sphere
+  sphere(16); // Draw a sphere
+  popMatrix(); // Restore original state
 }
 
 
-  public void settings() { size(640, 360); }
+  public void settings() { size(640, 640, P3D); }
 
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Processing" };
