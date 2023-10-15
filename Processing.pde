@@ -1,10 +1,46 @@
-PVector v = new PVector(1,5);
+class Mover {
+  PVector location;
+  PVector velocity;
+  PVector acceleration;
+  float topspeed = 4;
 
-// Using static method for multiplication
-PVector u = PVector.mult(v, 2);
+  Mover() {
+    location = new PVector(random(width), random(height));
+    velocity = new PVector(0, 0);
+  }
 
-// Using static method for subtraction
-PVector w = PVector.sub(v, u);
+  void update() {
+    PVector mouse = new PVector(mouseX, mouseY);
+    PVector dir = PVector.sub(mouse, location);
+    float distance = dir.mag();
+    
+    // Normalize and scale by a factor inversely proportional to distance
+    dir.normalize();
+    float strength = map(distance, 0, width, 5, 0); // Assuming max distance is width of canvas
+    dir.mult(strength);
+    
+    acceleration = dir;
+    velocity.add(acceleration);
+    velocity.limit(topspeed);
+    location.add(velocity);
+  }
 
-// Using non-static method for division
-w.div(3);
+  void display() {
+    fill(127);
+    stroke(0);
+    ellipse(location.x, location.y, 32, 32);
+  }
+}
+
+Mover m;
+
+void setup() {
+  size(640, 360);
+  m = new Mover();
+}
+
+void draw() {
+  background(255);
+  m.update();
+  m.display();
+}
