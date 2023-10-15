@@ -15,41 +15,74 @@ import java.io.IOException;
 
 public class Processing extends PApplet {
 
-PVector location;
-PVector velocity;
+Mover car;
 
 public void setup() {
   /* size commented out by preprocessor */;
-  location = new PVector(width/2, height/2, -50);
-  velocity = new PVector(5, 6, -7);
+  car = new Mover();
 }
 
 public void draw() {
   background(255);
-  lights();
+  car.update();
+  car.checkEdges();
+  car.display();
+}
 
-  location.add(velocity);
+class Mover {
+  PVector location;
+  PVector velocity;
+  PVector acceleration;
+  float topspeed;
 
-  if ((location.x > width-200) || (location.x < 100)) {
-    velocity.x = velocity.x * -1;
-  }
-  if ((location.y > height-200) || (location.y < 100)) {
-    velocity.y = velocity.y * -1;
-  }
-  if ((location.z > -100) || (location.z < 0)) {
-    velocity.z = velocity.z * -1;
+  Mover() {
+    location = new PVector(width/2, height/2);
+    velocity = new PVector(0, 0);
+    acceleration = new PVector(0, 0);
+    topspeed = 100;
   }
 
-  stroke(0);
-  fill(175);
-  pushMatrix(); // Start a new drawing state
-  translate(location.x, location.y, location.z); // Move to the location of the sphere
-  sphere(16); // Draw a sphere
-  popMatrix(); // Restore original state
+  public void update() {
+    if (keyPressed) {
+      if (key == CODED) {
+        if (keyCode == UP) {
+          acceleration.set(0, -0.1f);
+        } else if (keyCode == DOWN) {
+          acceleration.set(0, 0.1f);
+        }
+      }
+    } else {
+      acceleration.set(0, 0);
+    }
+
+    velocity.add(acceleration);
+    velocity.limit(topspeed);
+    location.add(velocity);
+  }
+
+  public void display() {
+    stroke(0);
+    fill(175);
+    ellipse(location.x, location.y, 16, 16);
+  }
+
+  public void checkEdges() {
+    if (location.x > width) {
+      location.x = 0;
+    } else if (location.x < 0) {
+      location.x = width;
+    }
+
+    if (location.y > height) {
+      location.y = 0;
+    } else if (location.y < 0) {
+      location.y = height;
+    }
+  }
 }
 
 
-  public void settings() { size(640, 640, P3D); }
+  public void settings() { size(640, 360); }
 
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Processing" };
