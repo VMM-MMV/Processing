@@ -24,7 +24,7 @@ void setup() {
 }
 
 void displayMenu() {
-  // float quarterOfScreen = width / 4;
+  float quarterOfScreen = width / 4;
   textSize(48);
   fill(255, 0, 0);
   textAlign(CENTER, CENTER);
@@ -147,7 +147,7 @@ void displayElapsedTime() {
   textSize(24);
   fill(0);
   textAlign(RIGHT, BOTTOM);
-  text(difficulty + "Time: " + nf(minutes, 2) + ":" + nf(seconds, 2), width - 10, height - 10);
+  text("Time: " + nf(minutes, 2) + ":" + nf(seconds, 2), width - 10, height - 10);
 }
 
 
@@ -186,19 +186,15 @@ void draw() {
 }
 
 void menu() {
-  // float quarterOfScreen = width / 4;
-  text("EASY", quarterOfScreen * 0.5, height / 2);
-  text("MEDIUM", quarterOfScreen * 1.5, height / 2);
-  text("HARD", quarterOfScreen * 2.5, height / 2);
-  text("HELL", quarterOfScreen * 3.5, height / 2);
+  float halfOfScreen = width / 2;
 
-  if (mouseX < quarterOfScreen * 0.5) {
+  if (mouseX < halfOfScreen * 0.5) {
     difficulty = 1;
     bulletAmount = 100;
-  } else if (mouseX <  quarterOfScreen * 1.5) {
+  } else if (mouseX <  halfOfScreen) {
     difficulty = 2;
     bulletAmount = 50;
-  } else if (mouseX < quarterOfScreen * 2.5) {
+  } else if (mouseX < halfOfScreen * 1.5) {
     difficulty = 3;
     bulletAmount = 25;
   } else {
