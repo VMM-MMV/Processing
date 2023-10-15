@@ -1,20 +1,24 @@
-PVector location = new PVector(0, 0);
-PVector velocity = new PVector(2, 2);
+PVector location;
 
 void setup() {
   size(640, 360);
+  location = new PVector(width/2, height/2);
+  background(255);
 }
 
 void draw() {
-  background(255);
-  location.add(velocity);
-  ellipse(location.x, location.y, 20, 20);
+  int choice = int(random(4));
 
-  if ((location.x > width) || (location.x < 0)) {
-    velocity.x = velocity.x * -1;
-  }
-  else if ((location.y > height) || (location.y < 0)) {
-    velocity.y = velocity.y * -1;
+  if (choice == 0) {
+    location.x++;
+  } else if (choice == 1) {
+    location.x--;
+  } else if (choice == 2) {
+    location.y++;
+  } else {
+    location.y--;
   }
 
+  stroke(0);
+  point(location.x, location.y);
 }
