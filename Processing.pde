@@ -1,15 +1,15 @@
-Mover car;
+Mover mover;
 
 void setup() {
   size(640, 360);
-  car = new Mover();
+  mover = new Mover();
 }
 
 void draw() {
   background(255);
-  car.update();
-  car.checkEdges();
-  car.display();
+  mover.update();
+  mover.checkEdges();
+  mover.display();
 }
 
 class Mover {
@@ -18,29 +18,35 @@ class Mover {
   PVector acceleration;
   float topspeed;
 
+  // Initialize Perlin noise offsets
+  float xoff = 0;
+  float yoff = 1000; // Arbitrary value to make it different from xoff
+
   Mover() {
     location = new PVector(width/2, height/2);
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
-    topspeed = 100;
+    topspeed = 5;
   }
 
   void update() {
-    if (keyPressed) {
-      if (key == CODED) {
-        if (keyCode == UP) {
-          acceleration.set(0, -0.1);
-        } else if (keyCode == DOWN) {
-          acceleration.set(0, 0.1);
-        }
-      }
-    } else {
-      acceleration.set(0, 0);
-    }
+    // Use Perlin noise to get a smooth random value between 0 and 1
+    float ax = noise(xoff);
+    float ay = noise(yoff);
+
+    // Map the values to desired acceleration range, for example -0.1 to 0.1
+    ax = map(ax, 0, 1, -0.1, 0.1);
+    ay = map(ay, 0, 1, -0.1, 0.1);
+
+    acceleration.set(ax, ay);
 
     velocity.add(acceleration);
     velocity.limit(topspeed);
     location.add(velocity);
+
+    // Increment the offsets to move through the Perlin noise space
+    xoff += 0.01;
+    yoff += 0.01;
   }
 
   void display() {
