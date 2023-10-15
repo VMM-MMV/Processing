@@ -3,8 +3,8 @@ PVector velocity;
 
 void setup() {
   size(640, 640, P3D);
-  location = new PVector(width/2, height/2, 100);
-  velocity = new PVector(2.5, 5, 20);
+  location = new PVector(width/2, height/2, -50);
+  velocity = new PVector(5, 6, -7);
 }
 
 void draw() {
@@ -19,7 +19,7 @@ void draw() {
   if ((location.y > height-200) || (location.y < 100)) {
     velocity.y = velocity.y * -1;
   }
-  if ((location.z > -200) || (location.z < 0)) {
+  if ((location.z > -100) || (location.z < 0)) {
     velocity.z = velocity.z * -1;
   }
 

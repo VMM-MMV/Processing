@@ -15,11 +15,13 @@ import java.io.IOException;
 
 public class Processing extends PApplet {
 
-PVector location = new PVector(640/2, 640/2, 100);
-PVector velocity = new PVector(2.5f, 5, 20);
+PVector location;
+PVector velocity;
 
 public void setup() {
   /* size commented out by preprocessor */;
+  location = new PVector(width/2, height/2, -50);
+  velocity = new PVector(5, 6, -7);
 }
 
 public void draw() {
@@ -34,7 +36,7 @@ public void draw() {
   if ((location.y > height-200) || (location.y < 100)) {
     velocity.y = velocity.y * -1;
   }
-  if ((location.z > -200) || (location.z < 0)) {
+  if ((location.z > -100) || (location.z < 0)) {
     velocity.z = velocity.z * -1;
   }
 
