@@ -1,46 +1,60 @@
-class Mover {
-  PVector location;
-  PVector velocity;
-  PVector acceleration;
-  float topspeed = 4;
+class Segment {
+  PVector position;
+  float offset;
 
-  Mover() {
-    location = new PVector(random(width), random(height));
-    velocity = new PVector(0, 0);
+  Segment(float x, float y, float offset) {
+    position = new PVector(x, y);
+    this.offset = offset;
   }
 
-  void update() {
-    PVector mouse = new PVector(mouseX, mouseY);
-    PVector dir = PVector.sub(mouse, location);
-    float distance = dir.mag();
-    
-    // Normalize and scale by a factor inversely proportional to distance
-    dir.normalize();
-    float strength = map(distance, 0, width, 5, 0); // Assuming max distance is width of canvas
-    dir.mult(strength);
-    
-    acceleration = dir;
-    velocity.add(acceleration);
-    velocity.limit(topspeed);
-    location.add(velocity);
+  void update(float x, float y) {
+    position.set(x, y);
   }
 
-  void display() {
-    fill(127);
-    stroke(0);
-    ellipse(location.x, location.y, 32, 32);
-  }
+  void display(float diameter) {
+      fill(100, 200, 100);  // Green color
+      ellipse(position.x, position.y, diameter, diameter);  // Drawing each segment as a circle
+    }
 }
 
-Mover m;
+Segment[] snake = new Segment[20];
+float headX, headY;
+float noiseOffset = 0;
 
 void setup() {
-  size(640, 360);
-  m = new Mover();
+  size(800, 600);
+  headX = 0;
+  headY = height / 2;
+  for (int i = 0; i < snake.length; i++) {
+    snake[i] = new Segment(headX - i * 10, headY, i * 0.5);
+  }
 }
 
 void draw() {
   background(255);
-  m.update();
-  m.display();
+
+  headX += 2;
+
+  if (headX > width) {
+    headX = 0;
+    noiseOffset = 0;
+  }
+
+  if (headY > height) {
+    headY = 0;
+  }
+
+  // Update segments
+  for (int i = 0; i < snake.length; i++) {
+    float x = headX - i * 10;
+    float y = headY + sin(radians(i * 20 + frameCount * 2)) * 10; 
+
+    snake[i].update(x, y);
+  }
+  
+  for (int i = 1; i < snake.length; i++) {
+    snake[i].display(10);
+  }
+
+  snake[0].display(20);
 }
