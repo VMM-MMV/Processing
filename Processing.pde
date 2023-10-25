@@ -44,7 +44,7 @@ void draw() {
     headY = 0;
   }
 
-  // Update segments
+  // Update segments`
   for (int i = 0; i < snake.length; i++) {
     float x = headX - i * 10;
     float y = headY + sin(radians(i * 20 + frameCount * 2)) * 10; 
