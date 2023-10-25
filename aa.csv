@@ -1,0 +1,7 @@
+"Question","Answer"
+"What are the steps to create a database","Write down your idea or requirements.,Identify the nouns to create tables.,Add attributes to tables.,Add relationships between tables.,Adjust design as needed."
+"What type/class of words help you to identify the tables","Nouns"
+"What type of words help you to identify the table attributes and additional tables","Verbs and adjectives."
+"Which type of Keys and Constraints were created (in this video example)","Primary Keys (PK) and Foreign Keys (FK)."
+"Convey the meaning of this video - formulate 4-5 short and concise sentences (what is this video about)","This video is guide for creating a well-structured database from an idea. It begins by identifying tables from nouns in the idea description and then adding appropriate attributes. Relationships between tables are established using Primary and Foreign Keys. Adjustments are made to refine the design, ensuring it aligns with requirements. The example used is a database that tracks doctor appointments."
+
